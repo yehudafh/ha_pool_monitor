@@ -1,21 +1,24 @@
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.translation import async_get_translations
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     config = config_entry.data
+    translations = await async_get_translations(hass, hass.config.language, "sensor", "pool_monitor")
     async_add_entities([
-        PoolSensor(config, "free_chlorine"),
-        PoolSensor(config, "total_chlorine"),
-        PoolSensor(config, "combined_chlorine"),
-        PoolSensor(config, "cya_level"),
-        PoolSensor(config, "pool_recommendations"),
+        PoolSensor(config, "free_chlorine", translations),
+        PoolSensor(config, "total_chlorine", translations),
+        PoolSensor(config, "combined_chlorine", translations),
+        PoolSensor(config, "cya_level", translations),
+        PoolSensor(config, "pool_recommendations", translations),
     ])
 
 class PoolSensor(Entity):
-    def __init__(self, config, sensor_type):
-        self._name = f"Pool {sensor_type.replace('_', ' ').title()}"
+    def __init__(self, config, sensor_type, translations):
+        self._name = translations.get(f"sensor.{sensor_type}", sensor_type.replace('_', ' ').title())
         self._state = None
         self._config = config
         self._sensor_type = sensor_type
+        self._translations = translations
 
     @property
     def name(self):
@@ -55,27 +58,27 @@ class PoolSensor(Entity):
             recommendations = []
             if free_chlorine < 1.5:
                 chlorine_needed = round((1.5 - free_chlorine) * self._config["pool_volume"] * 0.5, 0)
-                recommendations.append(f"הוסף {chlorine_needed} מ\"ל כלור")
+                recommendations.append(self._translations.get("sensor.recommendation_add_chlorine", "Add {chlorine_needed} ml of chlorine").format(chlorine_needed=chlorine_needed))
             if ph < 7.2:
                 acid_amount = round((7.2 - ph) * self._config["pool_volume"] * 0.1, 2)
-                recommendations.append(f"הוסף {acid_amount} גרם סודה אש")
+                recommendations.append(self._translations.get("sensor.recommendation_add_acid", "Add {acid_amount} grams of soda ash").format(acid_amount=acid_amount))
             elif ph > 7.8:
                 soda_ash_amount = round((ph - 7.8) * self._config["pool_volume"] * 0.1, 2)
-                recommendations.append(f"הוסף {soda_ash_amount} מ\"ל חומצת מלח")
+                recommendations.append(self._translations.get("sensor.recommendation_add_soda_ash", "Add {soda_ash_amount} ml of muriatic acid").format(soda_ash_amount=soda_ash_amount))
             if cya > 50:
-                recommendations.append("חומצה ציאנורית גבוהה מהטווח המומלץ")
+                recommendations.append(self._translations.get("sensor.recommendation_high_cya", "Cyanuric acid level is above the recommended range"))
             if salinity > 1300:
-                recommendations.append("המליחות גבוהה מאוד (עולה על 1300 ppm)")
+                recommendations.append(self._translations.get("sensor.recommendation_high_salinity", "Salinity is very high (above 1300 ppm)"))
             elif salinity < 800:
-                recommendations.append("המליחות נמוכה מאוד (מתחת ל-800 ppm)")
+                recommendations.append(self._translations.get("sensor.recommendation_low_salinity", "Salinity is very low (below 800 ppm)"))
             if ph < 6.8:
-                recommendations.append("ה-pH נמוך מאוד (מתחת ל-6.8)")
+                recommendations.append(self._translations.get("sensor.recommendation_low_ph", "pH is very low (below 6.8)"))
             elif ph > 8.0:
-                recommendations.append("ה-pH גבוה מאוד (מעל ל-8.0)")
+                recommendations.append(self._translations.get("sensor.recommendation_high_ph", "pH is very high (above 8.0)"))
             if free_chlorine < 1.0:
-                recommendations.append("רמת הכלור החופשי נמוכה מאוד (מתחת ל-1.0 ppm)")
+                recommendations.append(self._translations.get("sensor.recommendation_low_free_chlorine", "Free chlorine level is very low (below 1.0 ppm)"))
             elif free_chlorine > 3.0:
-                recommendations.append("רמת הכלור החופשי גבוהה מאוד (מעל ל-3.0 ppm)")
+                recommendations.append(self._translations.get("sensor.recommendation_high_free_chlorine", "Free chlorine level is very high (above 3.0 ppm)"))
             if recommendations:
                 self._state = ", ".join(recommendations)
             else:

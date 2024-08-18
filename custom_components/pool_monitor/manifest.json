@@ -6,5 +6,6 @@
   "dependencies": [],
   "codeowners": ["@yehudafh"],
   "requirements": [],
-  "config_flow": true
+  "config_flow": true,
+  "translations": ["translations"]
 }

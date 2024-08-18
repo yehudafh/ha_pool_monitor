@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "pool_volume": "נפח הבריכה (בליטרים)",
+          "pool_type": "סוג הבריכה",
+          "ph": "חיישן pH",
+          "temp": "חיישן טמפרטורה",
+          "tds": "חיישן TDS",
+          "ec": "חיישן EC",
+          "salinity": "חיישן מליחות",
+          "orp": "חיישן ORP"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "pool_volume": "נפח הבריכה (בליטרים)",
+          "pool_type": "סוג הבריכה",
+          "ph": "חיישן pH",
+          "temp": "חיישן טמפרטורה",
+          "tds": "חיישן TDS",
+          "ec": "חיישן EC",
+          "salinity": "חיישן מליחות",
+          "orp": "חיישן ORP"
+        }
+      }
+    }
+  },
+  "sensor": {
+    "free_chlorine": "כלור חופשי",
+    "total_chlorine": "כלור כולל",
+    "combined_chlorine": "כלור קשור",
+    "cya_level": "רמת חומצה ציאנורית",
+    "pool_recommendations": "המלצות לבריכה",
+    "recommendation_add_chlorine": "הוסף {chlorine_needed} מ\"ל כלור",
+    "recommendation_add_acid": "הוסף {acid_amount} גרם סודה אש",
+    "recommendation_add_soda_ash": "הוסף {soda_ash_amount} מ\"ל חומצת מלח",
+    "recommendation_high_cya": "חומצה ציאנורית גבוהה מהטווח המומלץ",
+    "recommendation_high_salinity": "המליחות גבוהה מאוד (עולה על 1300 ppm)",
+    "recommendation_low_salinity": "המליחות נמוכה מאוד (מתחת ל-800 ppm)",
+    "recommendation_low_ph": "ה-pH נמוך מאוד (מתחת ל-6.8)",
+    "recommendation_high_ph": "ה-pH גבוה מאוד (מעל ל-8.0)",
+    "recommendation_low_free_chlorine": "רמת הכלור החופשי נמוכה מאוד (מתחת ל-1.0 ppm)",
+    "recommendation_high_free_chlorine": "רמת הכלור החופשי גבוהה מאוד (מעל ל-3.0 ppm)"
+  }
+}
